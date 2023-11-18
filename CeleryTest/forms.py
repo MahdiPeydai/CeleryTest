@@ -1,5 +1,5 @@
 from django import forms
-from .tasks import sending_review_email
+from .tasks import sending_review_email_task
 
 
 class EmailForm(forms.Form):
@@ -8,7 +8,7 @@ class EmailForm(forms.Form):
     review = forms.CharField(label='review', max_length=500, widget=forms.Textarea)
 
     def send_email(self):
-        sending_review_email.apply_async(
+        sending_review_email_task.apply_async(
             (self.cleaned_data['name'], self.cleaned_data['email'], self.cleaned_data['review']),
             countdown=2
         )
